@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ilender-creditscore
+  labels:
+    app: ilender-application
+    subname: creditscore
+spec:
+  selector:
+    matchLabels:
+      app: ilender-application
+      subname: creditscore
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ilender-application
+        subname: creditscore
+    spec:
+      containers:
+        - name: container-creditscore
+          image: "gandigit/ilender-creditscore-ocp-logs:0.0.1"
+          imagePullPolicy: Always
+          ports:
+            - name: my-http
+              containerPort: 9071
+              protocol: TCP
+            - name: https
+              containerPort: 8082
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "250m"
+            limits:
+              memory: "4096Mi"
+              cpu: "500m"
+          envFrom:
+            - configMapRef:
+                name: ilender-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ilender-creditscore
+  labels:
+    app: ilender-application
+    subname: creditscore
+spec:
+  type: LoadBalancer
+  ports:
+    - name: my-http
+      port: 9090
+      targetPort: my-http
+  selector:
+    app: ilender-application
+    subname: creditscore
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ilender-creditscore
+  labels:
+    app: ilender-application
+    subname: creditscore
+spec:
+  path: /
+  to:
+    kind: Service
+    name: ilender-creditscore
+    weight: 100
+  port:
+    targetPort: my-http

@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ilender-customerprofile
+  labels:
+    app: ilender-application
+    subname: customerprofile
+spec:
+  selector:
+    matchLabels:
+      app: ilender-application
+      subname: customerprofile
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ilender-application
+        subname: customerprofile
+    spec:
+      containers:
+        - name: container-customerprofile
+          image: "gandigit/ilender-customerprofile-ocp-logs:0.0.1"
+          imagePullPolicy: Always
+          ports:
+            - name: my-http
+              containerPort: 9072
+              protocol: TCP
+            - name: https
+              containerPort: 8082
+          envFrom:
+            - configMapRef:
+                name: ilender-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ilender-customerprofile
+  labels:
+    app: ilender-application
+    subname: customerprofile
+spec:
+  type: LoadBalancer
+  ports:
+    - name: my-http
+      port: 9090
+      targetPort: my-http
+  selector:
+    app: ilender-application
+    subname: customerprofile
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ilender-customerprofile
+  labels:
+    app: ilender-application
+    subname: customerprofile
+spec:
+  path: /
+  to:
+    kind: Service
+    name: ilender-customerprofile
+    weight: 100
+  port:
+    targetPort: my-http

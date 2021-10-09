@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ilender-configmap
+  labels:
+    app: ilender-application
+    subname: configmap
+data:
+  urlLoanservice: http://ilender-loan:9090/loan
+  urlUserservice: http://ilender-user:9090/user
+  urlCustomerprofileservice: http://ilender-customerprofile:9090/customerprofile
+  urlOpenbankingservice: http://ilender-openbanking:9090/openbanking
+  urlBigbankservice: http://ilender-bigbank:9090/bigbank
+  urlGreatbankservice: http://ilender-greatbank:9090/greatbank
+  urlCreditscoreservice: http://ilender-creditscore:9090/creditscore
+  urlLoanprocessorservice: http://ilender-loanprocessor:9090/loanprocessor
+  
+  ### DB
+  datasourceUrl: jdbc:h2:mem:/ilender
+  datasourceUserName: admin
+  datasourcePassword: admin
+  datasourceDriverClassName: org.h2.Driver
+  datasourceJpaDatabasePlatform: org.hibernate.dialect.H2Dialect
+
+  ### MQ
+  greatbankMqQueueManager: qmgr
+  greatbankMqConnName: ilender-qm-ibm-mq.banking(1414)
+  greatbankMqChannel: DEV.APP.SVRCONN
+  greatbankMqQueueNameRequestLoanOffer: DEV.QUEUE.1
+  greatbankMqQueueNameRequestLoanDetail: DEV.QUEUE.2
+  greatbankMqQueueNameRequestTransHistory: DEV.QUEUE.3
+  greatbankMqQueueNameRequestLoanHistory: PROD.QUEUE.1
+
+
+  ### eventstream
+  iLenderEventstreamTopicRequestLoanOffer: ilender-request-loan-offer
+  iLenderEventstreamTopicRequestLoanDetail: ilender-request-loan-detail
+  iLenderEventstreamTopicNotifyLoanRequestApproved: ilender-notify-loan-request-approved
+  iLenderEventstreamTopicNotifyLoanOfferAccepted: ilender-notify-loan-offer-accepted
+  iLenderEventstreamTopicNotifyLoanRequestCreated: ilender-notify-loan-request-created
+  iLenderEventstreamServerUrl: eventstreams-kafka-bootstrap-integration.gsidemos-7ec5d722a0ab3f463fdc90eeb94dbc70-0000.us-south.containers.appdomain.cloud:443
+  iLenderEventstreamTruststoreLocation: /opt/ilender-eventstream.jks
+  iLenderEventstreamTruststorePassword: changeit
+  iLenderEventstreamSCRAMUserName: ilender
+  iLenderEventstreamSCRAMPassword: test
+  iLenderKafkaEnabled: "false"
+  iLenderNotifyEnabled: "false"
+  iLenderApiConnectEnabled: "false"
+
+  ### common
+  logType: DEFAULT
+  # logType: LOG_DNA
+  # logType: HUMIO
+  logHost: ocp-gsi
+  humioUrl: http://1.1.1.1:8080/api/v1/ingest/humio-unstructured
+  humioToken: 1111
+  logdnaUrl: https://logs.us-south.logging.cloud.ibm.com/logs/ingest
+  logdnaToken: 1111

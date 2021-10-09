@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ilender-loan
+  labels:
+    app: ilender-application
+    subname: loan
+spec:
+  selector:
+    matchLabels:
+      app: ilender-application
+      subname: loan
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ilender-application
+        subname: loan
+    spec:
+      containers:
+        - name: container-loan
+          image: "gandigit/ilender-loan-ocp-logs:0.0.1"
+          imagePullPolicy: Always
+          ports:
+            - name: my-http
+              containerPort: 9074
+              protocol: TCP
+            - name: https
+              containerPort: 8082
+          envFrom:
+            - configMapRef:
+                name: ilender-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ilender-loan
+
+  labels:
+    app: ilender-application
+    subname: loan
+spec:
+  type: LoadBalancer
+  ports:
+    - name: my-http
+      port: 9090
+      targetPort: my-http
+  selector:
+    app: ilender-application
+    subname: loan
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ilender-loan
+
+  labels:
+    app: ilender-application
+    subname: loan
+spec:
+  path: /
+  to:
+    kind: Service
+    name: ilender-loan
+    weight: 100
+  port:
+    targetPort: my-http

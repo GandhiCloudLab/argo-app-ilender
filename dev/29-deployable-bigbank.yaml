@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ilender-bigbank
+  labels:
+    app: ilender-application
+    subname: bigbank
+spec:
+  selector:
+    matchLabels:
+      app: ilender-application
+      subname: bigbank
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ilender-application
+        subname: bigbank
+    spec:
+      containers:
+        - name: container-bigbank
+          image: "gandigit/ilender-bigbank-ocp-logs:0.0.1"
+          imagePullPolicy: Always
+          ports:
+            - name: my-http
+              containerPort: 9078
+              protocol: TCP
+            - name: https
+              containerPort: 8082
+          envFrom:
+            - configMapRef:
+                name: ilender-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ilender-bigbank
+  labels:
+    app: ilender-application
+    subname: bigbank
+spec:
+  type: LoadBalancer
+  ports:
+    - name: my-http
+      port: 9090
+      targetPort: my-http
+  selector:
+    app: ilender-application
+    subname: bigbank
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ilender-bigbank
+  labels:
+    app: ilender-application
+    subname: bigbank
+spec:
+  path: /
+  to:
+    kind: Service
+    name: ilender-bigbank
+    weight: 100
+  port:
+    targetPort: my-http
