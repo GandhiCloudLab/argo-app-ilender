@@ -11,16 +11,16 @@ The article is based on the the following
  - RedHat OpenShift 4.6 on IBM Cloud (ROKS)
 
 
-## Install ArgoCD
+## 1. Install ArgoCD
 
 Install OpenShift GitOps (which installs Argo CD) using the url https://github.com/redhat-developer/openshift-gitops-getting-started
 
 The ArgoCD is installed and available in `openshift-gitops` namespace.
 
 
-## Yamls
+## 2. Yamls
 
-### iLender application
+### 2.1 iLender application
 
 iLender application yaml files for Dev, Stage and Prod are available here.
 
@@ -30,7 +30,7 @@ iLender application yaml files for Dev, Stage and Prod are available here.
 
 [Prod ](prod) 
 
-### ArgoCD application
+### 2.2 ArgoCD application
 
 We need to create an entry (application) in ArgoCD, to point to iLender application. For each Dev, Stage and Prod `in-cluster` of iLender, we need to have separate entry (application) in ArgoCD. Here the yamls to create app in ArgoCD.
 
@@ -42,7 +42,7 @@ The ArgoCD appplication looks like the below.
 
 <img src="images/01-all-apps.png">
 
-### ServiceAccount for ArgoCD
+### 2.3 ServiceAccount for ArgoCD
 
 ArgoCD requires cluster admin rights to access other namespaces to install ilender app. Here is the yaml file for service account.
 
@@ -50,7 +50,7 @@ ArgoCD requires cluster admin rights to access other namespaces to install ilend
 
 Service account is created inside `openshift-gitops` namespace as we have ArgoCD installed there.
 
-## Create ServiceAccount in ArgoCD 
+## 3. Create ServiceAccount in ArgoCD 
 
 Run the below command
 
@@ -58,9 +58,9 @@ Run the below command
 oc apply -f argo-setup-misc/sa.yaml
 ```
 
-## Create ArgoCD application
+## 4. Create ArgoCD application
 
-### 1. Create ArgoCD application for Dev
+### 4.1. Create ArgoCD application for Dev
 
 Run the below command
 
@@ -73,7 +73,7 @@ You might be able to see the app like this in ArgoCD.
 <img src="images/02-dev.png">
 
 
-### 2. Create ArgoCD application for Stage
+### 4.2. Create ArgoCD application for Stage
 
 Run the below command
 
@@ -86,7 +86,7 @@ You might be able to see the app like this in ArgoCD.
 <img src="images/03-stage.png">
 
 
-### 3. Create ArgoCD application for Prod
+### 4.3. Create ArgoCD application for Prod
 
 Run the below command
 
@@ -99,9 +99,9 @@ You might be able to see the app like this in ArgoCD.
 <img src="images/04-prod.png">
 
 
-## Deploy iLender
+## 5. Deploy iLender
 
-### Deploy iLender in Dev
+### 5.1 Deploy iLender in Dev
 
 1. Click on sync option to install iLender app in `Dev` in-cluster for the first time.
 
@@ -127,7 +127,7 @@ ilender-frontweb-ilender-dev-ns.aiops-dev-july-4caea77.us-south.containers.appdo
 
 <img src="images/07-ilender.png">
 
-### Deploy iLender in Stage
+### 5.2 Deploy iLender in Stage
 
 1. Click on sync option to install iLender app in `Stage` in-cluster for the first time.
 
@@ -144,7 +144,7 @@ oc get routes -n ilender-stage-ns | grep frontweb | awk '{print $2}'
 3. Open the url in the browser and access the application.
 
 
-### Deploy iLender in Prod
+### 5.3. Deploy iLender in Prod
 
 1. Click on sync option to install iLender app in `Prod` in-cluster for the first time.
 
@@ -157,9 +157,9 @@ oc get routes -n ilender-prod-ns | grep frontweb | awk '{print $2}'
 3. Open the url in the browser and access the application.
 
 
-## Deploy iLender based on changes in yaml
+## 6. Deploy iLender based on changes in yaml
 
-### Increasing the Replica in Stage cluster
+### 6.1 Increasing the Replica in Stage cluster
 
 Want to increase the replica to 2 for `ilender-loan` microservice. The ArgoCD will deploy the changes in Stage in-cluster if we sync it. 
 
@@ -189,7 +189,7 @@ The changes are synched and 2 instances of `ilender-loan` is deployed.
 
 <img src="images/13-stage-2-instance.png">
 
-### Increasing the Replica in Prod cluster
+### 6.2 Increasing the Replica in Prod cluster
 
 Want to increase the replica to 3 for `ilender-loan` microservice in Prod cluster. The ArgoCD will deploy the changes in Prod in-cluster during the sync.
 
