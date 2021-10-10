@@ -39,12 +39,11 @@ metadata:
     app: ilender-application
     subname: frontweb
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - name: my-http
       port: 9090
       targetPort: my-http
-      nodePort: 30500
   selector:
     app: ilender-application
     subname: frontweb
