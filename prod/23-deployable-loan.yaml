@@ -10,7 +10,7 @@ spec:
     matchLabels:
       app: ilender-application
       subname: loan
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
