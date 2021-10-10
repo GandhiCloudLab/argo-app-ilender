@@ -25,8 +25,10 @@ The ArgoCD is installed and available in `openshift-gitops` namespace.
 iLender application yaml files for Dev, Stage and Prod are available here.
 
 [Dev ](dev) 
+
 [Stage ](stage) 
-[Prod ](Prod) 
+
+[Prod ](prod) 
 
 ### ArgoCD application
 
@@ -155,7 +157,7 @@ oc get routes -n ilender-prod-ns | grep frontweb | awk '{print $2}'
 3. Open the url in the browser and access the application.
 
 
-## Deploy iLender
+## Deploy iLender based on changes in yaml
 
 ### Increasing the Replica in Stage cluster
 
@@ -189,7 +191,7 @@ The changes are synched and 2 instances of `ilender-loan` is deployed.
 
 ### Increasing the Replica in Prod cluster
 
-Want to increase the replica to 3 for `ilender-loan` microservice. The ArgoCD will deploy the changes in Stage in-cluster during the sync.
+Want to increase the replica to 3 for `ilender-loan` microservice in Prod cluster. The ArgoCD will deploy the changes in Prod in-cluster during the sync.
 
 
 1. Update the below yaml for the replica.
