@@ -53,6 +53,6 @@ data:
   # logType: HUMIO
   logHost: ocp-gsi
   humioUrl: http://1.1.1.1:8080/api/v1/ingest/humio-unstructured
-  humioToken: 1111
+  humioToken: aaaa
   logdnaUrl: https://logs.us-south.logging.cloud.ibm.com/logs/ingest
-  logdnaToken: 1111
+  logdnaToken: aaaa
